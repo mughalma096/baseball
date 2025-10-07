@@ -1,0 +1,27 @@
+<div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+  <div class="card-header text-center py-4">
+    <h1 class="font-bold text-4xl">Register</h1>
+  </div>
+  <div class="card-body">
+    <%= form_with url: registration_url do |form| %>
+      <fieldset class="fieldset">
+        <div class="flex gap-2">
+          <div>
+            <label class="label">First Name</label>
+            <%= form.text_field :first_name, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter first name", value: params[:email_address], class: "input" %>
+          </div>
+          <div class="mr-4">
+            <label class="label">Last Name</label>
+            <%= form.text_field :last_name, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter last name", value: params[:email_address], class: "input" %>
+          </div>
+        </div>
+        <label class="label">Email</label>
+        <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address], class: "input" %>
+        <label class="label">Password</label>
+        <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72, class: "input" %>
+        <%= form.submit "Sign up", class: "btn btn-neutral mt-4" %>
+        <div><%= link_to "Already have an account?", new_session_path, class: "link link-hover" %></div>
+      </fieldset>
+    <% end %>
+  </div>
+</div>
