@@ -22,7 +22,8 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body class="bg-base-200">
+    <%= render 'shared/navbar' %>
     <% if alert = flash[:alert] %>
       <p class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg inline-block" id="alert"><%= alert %></p>
     <% end %>
@@ -30,9 +31,9 @@
     <% if notice = flash[:notice] %>
       <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
     <% end %>
-    <main class="container mx-auto mt-28 px-5 flex">
+    <main class="container hero mx-auto h-screen">
       <%= yield %>
     </main>
-  <%= render 'shared/footer' %>
+    <%= render 'shared/footer' %>
   </body>
 </html>
