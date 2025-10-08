@@ -1,6 +1,9 @@
 <div class="navbar bg-base-100 shadow-sm fixed">
   <div class="flex-1">
-    <a class="btn btn-ghost text-xl">Baseball</a>
+    <%= link_to root_path, class: "btn btn-ghost hover:border-none hover:bg-inherit hover:shadow-none text-xl" do %>
+      <%= image_tag "baseball.png", alt: "Logo", class: "h-8 w-auto" %>
+      Baseball
+    <% end %>
   </div>
   <div class="flex gap-2">
     <% if Current.user %>
