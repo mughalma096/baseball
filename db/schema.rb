@@ -10,9 +10,48 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_06_015310) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_16_235744) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "billing_addresses", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.string "name"
+    t.string "address"
+    t.string "street"
+    t.string "city"
+    t.string "state"
+    t.string "postal_code"
+    t.string "country"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_billing_addresses_on_order_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.integer "status", default: 0, null: false
+    t.decimal "total_amount"
+    t.bigint "user_id", null: false
+    t.string "payment_method_id"
+    t.string "shipment_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["status"], name: "index_orders_on_status"
+    t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "payment_methods", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "provider"
+    t.string "card_brand"
+    t.string "card_last4"
+    t.integer "exp_month"
+    t.integer "exp_year"
+    t.string "provider_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_payment_methods_on_user_id"
+  end
 
   create_table "sessions", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -21,6 +60,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_06_015310) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "shipping_addresses", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.string "name"
+    t.string "address"
+    t.string "street"
+    t.string "city"
+    t.string "state"
+    t.string "postal_code"
+    t.string "country"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_shipping_addresses_on_order_id"
   end
 
   create_table "users", force: :cascade do |t|
