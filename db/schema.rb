@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_16_235744) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_25_071818) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -28,15 +28,42 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_235744) do
     t.index ["order_id"], name: "index_billing_addresses_on_order_id"
   end
 
-  create_table "orders", force: :cascade do |t|
-    t.integer "status", default: 0, null: false
-    t.decimal "total_amount"
-    t.bigint "user_id", null: false
-    t.string "payment_method_id"
-    t.string "shipment_id"
+  create_table "notes", force: :cascade do |t|
+    t.text "body"
+    t.integer "status"
+    t.string "notable_type", null: false
+    t.bigint "notable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["status"], name: "index_orders_on_status"
+    t.index ["notable_type", "notable_id"], name: "index_notes_on_notable"
+  end
+
+  create_table "order_items", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "product_id", null: false
+    t.integer "quantity", default: 1, null: false
+    t.decimal "price", precision: 10, null: false
+    t.float "discount", default: 0.0
+    t.decimal "total_price", precision: 10, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_items_on_order_id"
+    t.index ["product_id"], name: "index_order_items_on_product_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "payment_method_id", null: false
+    t.string "status"
+    t.decimal "amount", precision: 10, default: "0"
+    t.float "discount", default: 0.0
+    t.decimal "total_amount", precision: 10, default: "0"
+    t.string "shipment_id"
+    t.string "provider"
+    t.string "provider_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["payment_method_id"], name: "index_orders_on_payment_method_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
@@ -51,6 +78,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_235744) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_payment_methods_on_user_id"
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.string "product_type"
+    t.integer "year"
+    t.float "value"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -86,5 +124,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_235744) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "orders", "payment_methods"
+  add_foreign_key "orders", "users"
   add_foreign_key "sessions", "users"
 end
